@@ -10,6 +10,9 @@ local Workspace = game:GetService("Workspace")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Config = require(Shared:WaitForChild("Config"))
 local RopeChain = require(Shared:WaitForChild("logic"):WaitForChild("RopeChain"))
+local Reapparition = require(script.Parent:WaitForChild("Reapparition"))
+
+Players.RespawnTime = Config.RespawnTime
 
 local dossierCordes = Instance.new("Folder")
 dossierCordes.Name = "Cordes"
@@ -77,22 +80,32 @@ local function reconstruire()
 	print(`Roped Up : {#cordes} corde(s) active(s)`)
 end
 
+-- Prépare un personnage dès qu'il existe : cordes coupées s'il meurt,
+-- ramené près de l'équipe, puis relié.
+local function preparer(joueur, personnage)
+	personnage:WaitForChild("HumanoidRootPart")
+	local humanoide = personnage:WaitForChild("Humanoid")
+
+	humanoide.Died:Connect(function()
+		detruireCordesDe(joueur.UserId)
+	end)
+
+	Reapparition.ramener(joueur)
+	reconstruire()
+end
+
 local function surPersonnage(joueur)
 	joueur.CharacterAdded:Connect(function(personnage)
-		-- on attend que le personnage soit complet avant de relier
-		personnage:WaitForChild("HumanoidRootPart")
-		reconstruire()
+		preparer(joueur, personnage)
 	end)
 
 	joueur.CharacterRemoving:Connect(function()
 		detruireCordesDe(joueur.UserId)
 	end)
 
-	if joueur.Character then
-		task.spawn(function()
-			joueur.Character:WaitForChild("HumanoidRootPart")
-			reconstruire()
-		end)
+	local personnage = joueur.Character
+	if personnage then
+		task.spawn(preparer, joueur, personnage)
 	end
 end
 

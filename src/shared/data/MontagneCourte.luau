@@ -1,0 +1,50 @@
+-- Version courte pour tester vite (environ une minute).
+-- Pour l'utiliser : dans Config.luau, mets MontagneActive = "MontagneCourte".
+return {
+	nom = "Mont Cocorico (version courte)",
+	graine = 2026,
+	cap = 0,
+	sections = {
+		{ type = "plateau", largeur = 48, profondeur = 48, matiere = "herbe" },
+		{
+			type = "marches",
+			n = 8,
+			largeur = 18,
+			profondeur = 10,
+			ecart = 4,
+			hauteur = 3,
+			matiere = "herbe",
+		},
+		{ type = "plateau", largeur = 30, profondeur = 30, matiere = "pierre" },
+		{
+			type = "marches",
+			n = 5,
+			largeur = 10,
+			profondeur = 8,
+			ecart = 5,
+			hauteur = 0,
+			matiere = "pierre",
+		},
+		{
+			type = "marches",
+			n = 6,
+			largeur = 14,
+			profondeur = 9,
+			ecart = 4,
+			hauteur = 3.5,
+			matiere = "herbe",
+		},
+		{
+			type = "spirale",
+			n = 18,
+			rayon = 40,
+			pas = 20,
+			hauteur = 3.5,
+			largeur = 14,
+			profondeur = 9,
+			sens = 1,
+			matiere = "herbe",
+		},
+		{ type = "plateau", largeur = 40, profondeur = 40, matiere = "pierre", sommet = true },
+	},
+}

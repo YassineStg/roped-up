@@ -4,6 +4,10 @@ local suites = {
 	require("./example.test"),
 	require("./time.test"),
 	require("./ropechain.test"),
+	require("./aleatoire.test"),
+	require("./respawn.test"),
+	require("./montagne.test"),
+	require("./decor.test"),
 }
 
 local passed = 0
