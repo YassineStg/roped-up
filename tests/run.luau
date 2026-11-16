@@ -2,6 +2,7 @@ local process = require("@lune/process")
 
 local suites = {
 	require("./example.test"),
+	require("./time.test"),
 }
 
 local passed = 0
