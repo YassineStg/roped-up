@@ -43,3 +43,7 @@ Les couleurs et matières sont des constantes en tête de src/server/MontagneSer
 (herbe, pierre, piliers, lave, montagnes lointaines). La lumière, la brume et la lueur sont réglées
 en tête de src/server/Ambiance.server.luau. Pour une lave unie et lumineuse, remplace
 MATIERE_LAVE par Enum.Material.Neon.
+## Lave
+La lave est faite de deux couches : une roche fissurée (relief visible de près) et, juste au-dessus,
+un voile orange translucide qui la fait paraître incandescente de loin. Les deux sont réglées en tête de
+src/server/MontagneService.server.luau (COULEUR_LUEUR_LAVE, TRANSPARENCE_LUEUR). Le voile ne gêne pas les joueurs.
