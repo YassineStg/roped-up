@@ -16,10 +16,15 @@ local Description = require(Shared:WaitForChild("data"):WaitForChild(Config.Mont
 -- Couleurs et matières : à régler ici si le rendu ne te plaît pas.
 local COULEUR_HERBE = Color3.fromRGB(118, 186, 78)
 local COULEUR_PIERRE = Color3.fromRGB(146, 138, 130)
-local COULEUR_PILIER = Color3.fromRGB(126, 104, 90)
+local COULEUR_PILIER = Color3.fromRGB(170, 140, 118)
+local MATIERE_PILIER = Enum.Material.Slate -- Rock est très sombre vu de dessous
 local COULEUR_LAVE = Color3.fromRGB(255, 110, 30)
 local MATIERE_LAVE = Enum.Material.CrackedLava -- essaie Enum.Material.Neon pour une lave unie et lumineuse
 local COULEUR_MASSIF = Color3.fromRGB(150, 150, 182)
+-- Voile orange translucide au-dessus de la lave : de loin, elle paraît incandescente.
+-- Mets TRANSPARENCE_LUEUR à 1 pour le retirer, ou rapproche-la de 0 pour l'intensifier.
+local COULEUR_LUEUR_LAVE = Color3.fromRGB(255, 80, 10)
+local TRANSPARENCE_LUEUR = 0.75
 local COULEUR_OR = Color3.fromRGB(255, 196, 40)
 local COULEURS_CHAMPIGNONS = {
 	Color3.fromRGB(80, 200, 255),
@@ -141,7 +146,7 @@ for indice, p in plateformes do
 		Vector3.new(p.largeur * 0.8, profondeurPilier, p.profondeur * 0.8),
 		base * CFrame.new(0, -epaisseur - profondeurPilier / 2, 0),
 		varier(COULEUR_PILIER, ton, 0.14),
-		Enum.Material.Rock,
+		MATIERE_PILIER,
 		false
 	)
 
@@ -193,6 +198,20 @@ for colonne = 1, colonnes do
 			MATIERE_LAVE,
 			false
 		)
+
+		local lueur = bloc(
+			"LueurLave",
+			Vector3.new(tuileX, 0.2, tuileZ),
+			CFrame.new(
+				minX - marge + tuileX * (colonne - 0.5),
+				niveauLave + 0.3,
+				minZ - marge + tuileZ * (ligne - 0.5)
+			),
+			COULEUR_LUEUR_LAVE,
+			Enum.Material.Neon,
+			true
+		)
+		lueur.Transparency = TRANSPARENCE_LUEUR
 
 		lave.Touched:Connect(function(autre)
 			local humanoide = autre.Parent and autre.Parent:FindFirstChildOfClass("Humanoid")
