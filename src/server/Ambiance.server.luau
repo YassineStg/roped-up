@@ -19,11 +19,13 @@ local function remplacer(parent, classe, nom, proprietes)
 	return instance
 end
 
-Lighting.ClockTime = 17.4
-Lighting.Brightness = 2.6
+-- Lumière : plus c'est haut, plus c'est clair. À régler ici si le rendu ne te plaît pas.
+Lighting.ClockTime = 16.6
+Lighting.Brightness = 3.2
 Lighting.GlobalShadows = true
-Lighting.Ambient = Color3.fromRGB(70, 60, 90)
-Lighting.OutdoorAmbient = Color3.fromRGB(110, 95, 130)
+Lighting.ExposureCompensation = 0.3
+Lighting.Ambient = Color3.fromRGB(120, 110, 140)
+Lighting.OutdoorAmbient = Color3.fromRGB(150, 140, 170)
 
 remplacer(Lighting, "Atmosphere", "AtmosphereMontagne", {
 	Density = 0.32,
@@ -35,9 +37,9 @@ remplacer(Lighting, "Atmosphere", "AtmosphereMontagne", {
 })
 
 remplacer(Lighting, "BloomEffect", "LueurMontagne", {
-	Intensity = 0.7,
-	Size = 28,
-	Threshold = 0.9,
+	Intensity = 0.4,
+	Size = 24,
+	Threshold = 1.1,
 })
 
 remplacer(Lighting, "ColorCorrectionEffect", "CouleursMontagne", {

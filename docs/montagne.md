@@ -38,3 +38,8 @@ Cette règle sera remplacée par les checkpoints d'équipe (story 2.2).
 
 ## Pas encore fait
 Poule géante et obstacles (story 2.3), arrivée et chrono (story 2.4), feux d'artifice.
+## Régler le rendu
+Les couleurs et matières sont des constantes en tête de src/server/MontagneService.server.luau
+(herbe, pierre, piliers, lave, montagnes lointaines). La lumière, la brume et la lueur sont réglées
+en tête de src/server/Ambiance.server.luau. Pour une lave unie et lumineuse, remplace
+MATIERE_LAVE par Enum.Material.Neon.
