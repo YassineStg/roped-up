@@ -10,8 +10,9 @@ local Config = require(Shared:WaitForChild("Config"))
 local Logique = Shared:WaitForChild("logic")
 local Aleatoire = require(Logique:WaitForChild("Aleatoire"))
 local Montagne = require(Logique:WaitForChild("Montagne"))
+local Parcours = require(script.Parent:WaitForChild("Parcours"))
 local Decor = require(Logique:WaitForChild("Decor"))
-local Description = require(Shared:WaitForChild("data"):WaitForChild(Config.MontagneActive))
+local Description = Parcours.description
 
 -- Couleurs et matières : à régler ici si le rendu ne te plaît pas.
 local COULEUR_HERBE = Color3.fromRGB(118, 186, 78)
@@ -26,6 +27,8 @@ local COULEUR_MASSIF = Color3.fromRGB(150, 150, 182)
 local COULEUR_LUEUR_LAVE = Color3.fromRGB(255, 80, 10)
 local TRANSPARENCE_LUEUR = 0.75
 local COULEUR_OR = Color3.fromRGB(255, 196, 40)
+local COULEUR_DRAPEAU = Color3.fromRGB(150, 150, 160) -- un checkpoint pas encore atteint
+local COULEUR_DRAPEAU_ATTEINT = Color3.fromRGB(80, 230, 120)
 local COULEURS_CHAMPIGNONS = {
 	Color3.fromRGB(80, 200, 255),
 	Color3.fromRGB(230, 90, 255),
@@ -94,7 +97,7 @@ end
 
 -- ---------- Plateformes ----------
 
-local plateformes = Montagne.plateformes(Description)
+local plateformes = Parcours.plateformes
 
 local problemes = Montagne.valider(plateformes, {
 	ecartMax = Config.JumpMaxGap,
@@ -290,6 +293,33 @@ do
 	local etincelles = Instance.new("Sparkles")
 	etincelles.SparkleColor = COULEUR_OR
 	etincelles.Parent = coupe
+end
+
+-- ---------- Drapeaux de checkpoint ----------
+
+for rang, checkpoint in Parcours.checkpoints do
+	local base = CFrame.new(checkpoint.x, checkpoint.y, checkpoint.z)
+		* CFrame.Angles(0, checkpoint.cap, 0)
+	local pied = base * CFrame.new(math.min(checkpoint.largeur / 2 - 2, 6), 0, 0)
+	local atteint = rang <= Parcours.etat.actif
+
+	cylindre(
+		"DrapeauMat" .. rang,
+		10,
+		0.5,
+		pied * CFrame.new(0, 5, 0),
+		Color3.fromRGB(210, 210, 215),
+		Enum.Material.Metal,
+		true
+	)
+	bloc(
+		"DrapeauToile" .. rang,
+		Vector3.new(0.3, 3, 5),
+		pied * CFrame.new(0, 8.5, 2.7),
+		if atteint then COULEUR_DRAPEAU_ATTEINT else COULEUR_DRAPEAU,
+		Enum.Material.Neon,
+		true
+	)
 end
 
 -- ---------- Champignons lumineux ----------

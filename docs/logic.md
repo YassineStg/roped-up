@@ -38,3 +38,11 @@ Voir docs/montagne.md.
 ## Respawn (src/shared/logic/Respawn.luau)
 
 `Respawn.choisirCible(joueurs, idExclu)` : le coéquipier vivant le plus haut, ou nil.
+## Checkpoints (src/shared/logic/Checkpoints.luau)
+
+- `Checkpoints.extraire(plateformes)` : la liste ordonnée des checkpoints d'une montagne
+- `Checkpoints.etatInitial()` et `Checkpoints.atteindre(etat, rang)` : le checkpoint actif de l'équipe, qui ne recule jamais
+- `Checkpoints.sous(checkpoints, x, yPieds, z, tolerance)` : sur quel checkpoint se tient un joueur
+- `Checkpoints.position(checkpoint, rang, total, ecart)` : où replacer chaque joueur d'une équipe
+
+Voir docs/checkpoints.md.

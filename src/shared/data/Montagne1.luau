@@ -57,6 +57,7 @@ return {
 			ecart = 5,
 			hauteur = 3.5,
 			matiere = "pierre",
+			checkpoint = true,
 		},
 		{
 			type = "spirale",
@@ -68,6 +69,7 @@ return {
 			profondeur = 9,
 			sens = -1,
 			matiere = "herbe",
+			checkpoint = true,
 		},
 		{
 			type = "marches",
@@ -97,6 +99,7 @@ return {
 			ecart = 4,
 			hauteur = 3,
 			matiere = "herbe",
+			checkpoint = true,
 		},
 		{
 			type = "spirale",
@@ -108,6 +111,7 @@ return {
 			profondeur = 9,
 			sens = 1,
 			matiere = "herbe",
+			checkpoint = true,
 		},
 		{
 			type = "marches",

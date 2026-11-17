@@ -6,6 +6,11 @@ return {
 	MaxTeamSize = 4,
 	RespawnTime = 3,
 
+	-- Checkpoints
+	CheckpointTolerance = 6, -- hauteur max (en studs) au-dessus d'une plateforme pour compter comme "dessus"
+	CheckpointSpacing = 3, -- écart entre deux joueurs qui reprennent au même checkpoint
+	RespawnNearTeammates = true, -- true : on reprend près d'un coéquipier vivant (la corde l'exige)
+
 	-- Montagne
 	MontagneActive = "Montagne1", -- nom du fichier dans src/shared/data (ou "MontagneCourte" pour tester vite)
 	PlatformThickness = 4, -- épaisseur d'une plateforme
