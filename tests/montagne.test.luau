@@ -148,6 +148,81 @@ function tests.sommet_et_matiere_sont_conserves()
 	assert(liste[2].matiere == "pierre")
 end
 
+-- ---------- Checkpoints ----------
+
+function tests.un_plateau_est_un_checkpoint_par_defaut()
+	local liste = Montagne.plateformes(description({ PLATEAU }))
+	assert(liste[1].checkpoint == true)
+end
+
+function tests.un_plateau_peut_refuser_d_etre_un_checkpoint()
+	local liste = Montagne.plateformes(description({
+		PLATEAU,
+		{ type = "plateau", largeur = 20, profondeur = 20, checkpoint = false },
+	}))
+	assert(liste[1].checkpoint == true and liste[2].checkpoint == false)
+end
+
+function tests.des_marches_ne_sont_pas_des_checkpoints_sauf_demande()
+	local liste = Montagne.plateformes(description({
+		PLATEAU,
+		{ type = "marches", n = 3, largeur = 10, profondeur = 8, ecart = 4, hauteur = 2 },
+	}))
+	assert(
+		liste[2].checkpoint == false
+			and liste[3].checkpoint == false
+			and liste[4].checkpoint == false
+	)
+end
+
+function tests.seule_la_derniere_marche_est_un_checkpoint()
+	local liste = Montagne.plateformes(description({
+		PLATEAU,
+		{
+			type = "marches",
+			n = 3,
+			largeur = 10,
+			profondeur = 8,
+			ecart = 4,
+			hauteur = 2,
+			checkpoint = true,
+		},
+	}))
+	assert(liste[2].checkpoint == false and liste[3].checkpoint == false)
+	assert(liste[4].checkpoint == true)
+end
+
+function tests.seule_la_derniere_plateforme_d_une_spirale_est_un_checkpoint()
+	local liste = Montagne.plateformes(description({
+		PLATEAU,
+		{
+			type = "spirale",
+			n = 4,
+			rayon = 50,
+			pas = 18,
+			hauteur = 3,
+			largeur = 14,
+			profondeur = 9,
+			sens = 1,
+			checkpoint = true,
+		},
+	}))
+	assert(
+		liste[2].checkpoint == false
+			and liste[3].checkpoint == false
+			and liste[4].checkpoint == false
+	)
+	assert(liste[5].checkpoint == true)
+end
+
+function tests.checkpoint_invalide_leve_une_erreur()
+	attendre_erreur(function()
+		Montagne.plateformes(description({
+			{ type = "plateau", largeur = 20, profondeur = 20, checkpoint = "oui" },
+		}))
+	end, "checkpoint")
+end
+
 -- ---------- Descriptions invalides ----------
 
 function tests.description_invalide_leve_une_erreur()

@@ -3,10 +3,12 @@
 --
 -- Une montagne est une suite de sections, enchaînées à partir d'un curseur
 -- qui avance dans la direction courante (le "cap", en degrés, 0 = vers +Z) :
---   plateau : une grande plateforme (zone de repos)
+--   plateau : une grande plateforme (zone de repos, c'est aussi un checkpoint)
 --   marches : n plateformes qui montent (ou restent à plat) en ligne
 --   spirale : n plateformes qui tournent autour d'un centre en montant
 -- Une section peut commencer par un "virage" (en degrés) qui change le cap.
+-- Un plateau est un checkpoint (sauf checkpoint = false) ; pour des marches ou une spirale,
+-- checkpoint = true fait de leur dernière plateforme un checkpoint.
 
 local Montagne = {}
 
@@ -43,6 +45,10 @@ local function verifierSection(section, indice)
 
 	if section.virage ~= nil and not estNombre(section.virage) then
 		return nom .. " : le virage doit être un nombre"
+	end
+
+	if section.checkpoint ~= nil and type(section.checkpoint) ~= "boolean" then
+		return nom .. " : checkpoint doit valoir true ou false"
 	end
 
 	if section.type == "plateau" then
@@ -91,7 +97,7 @@ local function verifierSection(section, indice)
 	return nil
 end
 
--- Renvoie la liste des plateformes : { x, y, z, largeur, profondeur, cap, matiere, section, sommet }.
+-- Renvoie la liste des plateformes : { x, y, z, largeur, profondeur, cap, matiere, section, sommet, checkpoint }.
 -- (x, y, z) est le centre du dessus de la plateforme. cap est en radians.
 -- La première plateforme est centrée sur (0, 0, 0).
 function Montagne.plateformes(description)
@@ -107,7 +113,7 @@ function Montagne.plateformes(description)
 	local x, y, z = 0, 0, 0
 	local liste = {}
 
-	local function ajouter(largeur, profondeur, indice, section)
+	local function ajouter(largeur, profondeur, indice, section, checkpoint)
 		table.insert(liste, {
 			x = x,
 			y = y,
@@ -118,11 +124,12 @@ function Montagne.plateformes(description)
 			matiere = section.matiere or "herbe",
 			section = indice,
 			sommet = section.sommet == true,
+			checkpoint = checkpoint,
 		})
 	end
 
 	-- Avance le curseur d'une plateforme à la suivante, dans la direction du cap.
-	local function avancer(largeur, profondeur, ecart, hauteur, indice, section)
+	local function avancer(largeur, profondeur, ecart, hauteur, indice, section, checkpoint)
 		local derniere = liste[#liste]
 
 		if derniere ~= nil then
@@ -133,7 +140,7 @@ function Montagne.plateformes(description)
 		end
 
 		y += hauteur
-		ajouter(largeur, profondeur, indice, section)
+		ajouter(largeur, profondeur, indice, section, checkpoint)
 	end
 
 	for indice, section in description.sections do
@@ -145,16 +152,26 @@ function Montagne.plateformes(description)
 		cap += math.rad(section.virage or 0)
 
 		if section.type == "plateau" then
-			avancer(section.largeur, section.profondeur, section.ecart or 4, 0, indice, section)
+			avancer(
+				section.largeur,
+				section.profondeur,
+				section.ecart or 4,
+				0,
+				indice,
+				section,
+				section.checkpoint ~= false
+			)
 		elseif section.type == "marches" then
-			for _ = 1, section.n do
+			for k = 1, section.n do
+				local dernier = k == section.n and section.checkpoint == true
 				avancer(
 					section.largeur,
 					section.profondeur,
 					section.ecart,
 					section.hauteur,
 					indice,
-					section
+					section,
+					dernier
 				)
 			end
 		elseif section.type == "spirale" then
@@ -170,7 +187,13 @@ function Montagne.plateformes(description)
 				x = cx - section.rayon * sens * math.cos(cap)
 				z = cz + section.rayon * sens * math.sin(cap)
 				y += section.hauteur
-				ajouter(section.largeur, section.profondeur, indice, section)
+				ajouter(
+					section.largeur,
+					section.profondeur,
+					indice,
+					section,
+					k == section.n and section.checkpoint == true
+				)
 			end
 		end
 	end

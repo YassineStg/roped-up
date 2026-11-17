@@ -8,6 +8,7 @@ local suites = {
 	require("./respawn.test"),
 	require("./montagne.test"),
 	require("./decor.test"),
+	require("./checkpoints.test"),
 }
 
 local passed = 0
