@@ -13,10 +13,13 @@ local Montagne = require(Logique:WaitForChild("Montagne"))
 local Decor = require(Logique:WaitForChild("Decor"))
 local Description = require(Shared:WaitForChild("data"):WaitForChild(Config.MontagneActive))
 
-local COULEUR_HERBE = Color3.fromRGB(96, 160, 72)
-local COULEUR_PIERRE = Color3.fromRGB(112, 108, 104)
-local COULEUR_PILIER = Color3.fromRGB(84, 74, 68)
-local COULEUR_LAVE = Color3.fromRGB(255, 100, 20)
+-- Couleurs et matières : à régler ici si le rendu ne te plaît pas.
+local COULEUR_HERBE = Color3.fromRGB(118, 186, 78)
+local COULEUR_PIERRE = Color3.fromRGB(146, 138, 130)
+local COULEUR_PILIER = Color3.fromRGB(126, 104, 90)
+local COULEUR_LAVE = Color3.fromRGB(255, 110, 30)
+local MATIERE_LAVE = Enum.Material.CrackedLava -- essaie Enum.Material.Neon pour une lave unie et lumineuse
+local COULEUR_MASSIF = Color3.fromRGB(150, 150, 182)
 local COULEUR_OR = Color3.fromRGB(255, 196, 40)
 local COULEURS_CHAMPIGNONS = {
 	Color3.fromRGB(80, 200, 255),
@@ -187,7 +190,7 @@ for colonne = 1, colonnes do
 				minZ - marge + tuileZ * (ligne - 0.5)
 			),
 			COULEUR_LAVE,
-			Enum.Material.Neon,
+			MATIERE_LAVE,
 			false
 		)
 
@@ -311,7 +314,7 @@ for indice, m in massifs do
 		couleur = Color3.fromRGB(240, 244, 250)
 		matiere = Enum.Material.Snow
 	else
-		couleur = varier(Color3.fromRGB(110, 104, 128), m.ton, 0.2)
+		couleur = varier(COULEUR_MASSIF, m.ton, 0.2)
 		matiere = Enum.Material.Slate
 	end
 
